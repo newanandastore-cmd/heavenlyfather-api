@@ -6,7 +6,7 @@ export default async function handler(req, res) {
       `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/passages/${encodeURIComponent(reference)}`,
       {
         headers: {
-          "api-key": "PASTE_YOUR_REAL_API_KEY_HERE"
+          "api-key": "XpyMeeoLPX0_-mvUg7wub"
         }
       }
     );
