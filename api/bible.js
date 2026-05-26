@@ -6,18 +6,18 @@ export default async function handler(req, res) {
       `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/passages/${encodeURIComponent(reference)}`,
       {
         headers: {
-          "x-api-key": process.env.BIBLE_API_KEY
-        },
+          "api-key": "PASTE_YOUR_REAL_API_KEY_HERE"
+        }
       }
     );
 
-    const text = await response.text();
+    const data = await response.json();
 
-    res.status(200).send(text);
+    res.status(200).json(data);
 
   } catch (error) {
     res.status(500).json({
-      error: error.message,
+      error: error.message
     });
   }
 }
