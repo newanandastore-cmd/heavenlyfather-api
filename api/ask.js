@@ -25,14 +25,10 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "No response from Gemini";
-
     res.status(200).json({
       success: true,
       question,
-      reply,
+      gemini_response: data,
     });
   } catch (error) {
     res.status(500).json({
