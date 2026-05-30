@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const { question } = req.query;
+  const { question = "Who is God?" } = req.query;
 
   try {
     const response = await fetch(
@@ -14,11 +14,11 @@ export default async function handler(req, res) {
             {
               parts: [
                 {
-                  text: question || "Who is God?"
-                }
-              ]
-            }
-          ]
+                  text: question,
+                },
+              ],
+            },
+          ],
         }),
       }
     );
@@ -34,7 +34,6 @@ export default async function handler(req, res) {
       question,
       reply,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
