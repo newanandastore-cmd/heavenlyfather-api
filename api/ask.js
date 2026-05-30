@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const { question = "Who is God?" } = req.query;
+  const { question = "Who is Jesus?" } = req.query;
 
   try {
     const response = await fetch(
@@ -25,10 +25,14 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    const reply =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "No response from Gemini";
+
     res.status(200).json({
       success: true,
       question,
-      gemini_response: data,
+      reply,
     });
   } catch (error) {
     res.status(500).json({
