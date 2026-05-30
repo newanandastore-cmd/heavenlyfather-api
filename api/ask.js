@@ -1,60 +1,44 @@
 export default async function handler(req, res) {
+  const { question } = req.query;
 
-  // -----------------------------
-  // AI TEST ENDPOINT
-  // -----------------------------
-  if (req.url.includes('/api/ask')) {
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: question || "Who is God?"
+                }
+              ]
+            }
+          ]
+        }),
+      }
+    );
 
-    return res.status(200).json({
+    const data = await response.json();
+
+    const reply =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "No response from Gemini";
+
+    res.status(200).json({
       success: true,
-      reply: "Heavenly Father API working successfully"
+      question,
+      reply,
     });
 
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
   }
-
-  // -----------------------------
-  // BIBLE SEARCH ENDPOINT
-  // -----------------------------
-  if (req.url.includes('/api/bible')) {
-
-    try {
-
-      const reference = req.query.reference || 'John 3:16';
-
-      const bibleId = 'de4e12af7f28f599-02';
-
-      const apiKey = process.env.BIBLE_API_KEY;
-
-      const response = await fetch(
-        `https://api.scripture.api.bible/v1/bibles/${bibleId}/passages/${encodeURIComponent(reference)}`,
-        {
-          headers: {
-            'api-key': apiKey
-          }
-        }
-      );
-
-      const data = await response.json();
-
-      return res.status(200).json(data);
-
-    } catch (error) {
-
-      return res.status(500).json({
-        success: false,
-        error: error.message
-      });
-
-    }
-
-  }
-
-  // -----------------------------
-  // DEFAULT
-  // -----------------------------
-  return res.status(404).json({
-    success: false,
-    message: 'Endpoint not found'
-  });
-
 }
