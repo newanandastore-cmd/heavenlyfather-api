@@ -1,9 +1,7 @@
 export default async function handler(req, res) {
-  const { reference = "John 3:16" } = req.query;
-
   try {
     const response = await fetch(
-      `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/search?query=${encodeURIComponent(reference)}`,
+      "https://rest.api.bible/v1/bibles",
       {
         headers: {
           "api-key": process.env.API_BIBLE_KEY
@@ -13,13 +11,11 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    res.status(200).json(data);
+    res.status(response.status).json(data);
 
   } catch (error) {
-
     res.status(500).json({
       error: error.message
     });
-
   }
 }
