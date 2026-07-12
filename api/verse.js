@@ -30,13 +30,16 @@ export default async function handler(req, res) {
     );
 
     const data = await response.json();
+    
+const passage = data.data.passages[0];
 
-    res.status(200).json({
-      success: true,
-      translation: bible,
-      reference,
-      data
-    });
+res.status(200).json({
+  success: true,
+  reference: passage.reference,
+  translation: bible,
+  content: passage.content,
+  verseCount: passage.verseCount
+});
 
   } catch (error) {
 
